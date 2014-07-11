@@ -79,7 +79,7 @@ public:
             return true;
         }
         else{
-            cout << "Erro!" << endl;
+            cout << "Erro ao ler o arquivo!" << endl;
             return false;
         }
 
@@ -151,10 +151,9 @@ public:
 
             huffFile.close();
 
-            cout << "Comprimido!" << endl;
         }
         else{
-            cout << "Erro!" << endl;
+            cout << "Erro ao ler o arquivo!" << endl;
         }
 
 
@@ -253,11 +252,14 @@ public:
             trash = baToInt(2, 0);
             treeSize = baToInt(15, 3);
 
-            originalName = new char[nameSize];
+            string nameAux;
             for(int i = 3; i <= nameSize + 2; i++){
                 myFile.seekg(i);
-                originalName[i-3] = myFile.get();
+                nameAux += myFile.get();
             }
+            originalName = new char[nameAux.size()+1];
+            strcpy(originalName, nameAux.c_str());
+            strcat(originalName,"\0");
 
             for(int i = nameSize + 3; i <= treeSize + nameSize + 2; i++){
                 myFile.seekg(i);
@@ -293,11 +295,12 @@ public:
         ifstream myFile;
         myFile.open(file, std::ios::in | std::ios::binary);
 
-        myFile.seekg(0, ios::end);
-        int size = myFile.tellg();
-        myFile.seekg(0, ios::beg);
-
         if(myFile.is_open()){
+
+            myFile.seekg(0, ios::end);
+            int size = myFile.tellg();
+            myFile.seekg(0, ios::beg);
+
             bitArray = new QBitArray(8);
 
             ofstream uncompFile;
@@ -325,10 +328,6 @@ public:
                 }
 
                 for(int j = 0; j <= k; j++){
-                    if(actualNode->isLeaf()){
-                        uncompFile.put(actualNode->contet());
-                        actualNode = root;
-                    }
                     if(!actualNode->isLeaf()){
                         if(bitArray->at(j)){
                             actualNode = actualNode->getRight();
@@ -336,21 +335,20 @@ public:
                             actualNode = actualNode->getLeft();
                         }
                     }
-                }
-
-                if(actualNode->isLeaf()){
-                    uncompFile.put(actualNode->contet());
-                    actualNode = root;
+                    if(actualNode->isLeaf()){
+                        uncompFile.put(actualNode->contet());
+                        actualNode = root;
+                    }
                 }
             }
 
             uncompFile.close();
+
+        }else{
+            cout << "Erro ao ler o arquivo!" << endl;
         }
 
         myFile.close();
-
-        cout << "Descomprimido!" << endl;
-
     }
 
     char* getOriginalName(){

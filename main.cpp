@@ -87,6 +87,7 @@ void HuffCompac(char* fileToCompac, char* huffName){
         tree->buildHuffTree(file.getNodeList());
         tree->treeRepresentation(tree->getRoot());
         file.writeCompac(tree->getDictionary(), fileToCompac, fileName, huffName, tree->getTree());
+        cout << "Compactado!" << endl;
     }
 }
 
@@ -98,6 +99,7 @@ void HuffUncomp(char* fileToUncomp, char* destiny){
         HuffTree *tree = new HuffTree;
         tree->rebuildTree(file.getTreeRepre());
         file.writeUncomp(fileToUncomp, destiny, tree->getRoot());
+        cout << "Descompactado!" << endl;
     }
 }
 
