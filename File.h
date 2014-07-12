@@ -371,10 +371,6 @@ public:
 
     }
 
-    char* getOriginalName(){
-        return originalName;
-    }
-
 };
 
 #endif // FILE_H
