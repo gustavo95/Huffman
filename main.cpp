@@ -87,19 +87,20 @@ void HuffCompac(char* fileToCompac, char* huffName){
         tree->buildHuffTree(file.getNodeList());
         tree->treeRepresentation(tree->getRoot());
         file.writeCompac(tree->getDictionary(), fileToCompac, fileName, huffName, tree->getTree());
-        cout << "Compactado!" << endl;
     }
 }
 
 //descompactar arquivo
-void HuffUncomp(char* fileToUncomp, char* destiny){
+void HuffUncomp(char* fileToUncomp, string destiny){
     File file;
+    char* aux = new char[destiny.size()+1];
 
     if(file.readUncomp(fileToUncomp)){
         HuffTree *tree = new HuffTree;
         tree->rebuildTree(file.getTreeRepre());
-        file.writeUncomp(fileToUncomp, destiny, tree->getRoot());
-        cout << "Descompactado!" << endl;
+        strcpy(aux, destiny.c_str());
+        strcat(aux,"\0");
+        file.writeUncomp(fileToUncomp, aux, tree->getRoot());
     }
 }
 
@@ -118,8 +119,9 @@ int main(int argc, char *argv[])
         HuffUncomp(argv[1], "");
     }
     else if(argc == 4 && isHuff(argv[1]) && strcmp(argv[2],"-d") == 0){
-        strcat(argv[3],"\\");
-        HuffUncomp(argv[1], argv[3]);
+        string aux = argv[3];
+        aux += "\\";
+        HuffUncomp(argv[1], aux);
     }
     else{
         cout << endl;

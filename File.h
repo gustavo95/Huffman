@@ -112,44 +112,51 @@ public:
 
             huffFile.open(huffName, std::ios::out | std::ios::binary);
 
-            huffFile.seekp(tree.size() + strlen(fileName) + 2);
+            if(huffFile.is_open()){
+                huffFile.seekp(tree.size() + strlen(fileName) + 2);
 
-            while (size > 0) {
-                BYTE x;
-                x = myFile.get();
+                while (size > 0) {
+                    BYTE x;
+                    x = myFile.get();
 
-                HuffNode *aux = new HuffNode;
+                    HuffNode *aux = new HuffNode;
 
-                for(int i = 0; i < dictionary->length(); i++){
-                    dictionary->moveToPos(i);
-                    *aux = dictionary->getValue();
+                    for(int i = 0; i < dictionary->length(); i++){
+                        dictionary->moveToPos(i);
+                        *aux = dictionary->getValue();
 
-                    if(x == aux->contet()){
-                        for(int j = 0; j < aux->getBitArray().size(); j++){
-                            bitArray->setBit(baSize, aux->getBitArray().at(j));
-                            baSize++;
+                        if(x == aux->contet()){
+                            for(int j = 0; j < aux->getBitArray().size(); j++){
+                                bitArray->setBit(baSize, aux->getBitArray().at(j));
+                                baSize++;
 
-                            if(baSize == 8){
-                                huffFile.put(baToChar());
-                                bitArray->fill(false);
-                                baSize = 0;
+                                if(baSize == 8){
+                                    huffFile.put(baToChar());
+                                    bitArray->fill(false);
+                                    baSize = 0;
+                                }
                             }
                         }
                     }
+                    size--;
                 }
-                size--;
+
+                if(baSize != 0){
+                    huffFile.put(baToChar());
+                    trash = 8 - baSize;
+                    bitArray->fill(false);
+                    baSize = 0;
+                }
+
+                this->header(fileName,tree);
+
+                huffFile.close();
+                cout << "Compactado!" << endl;
+
+            }else{
+                cout << "Erro ao criar o arquivo!" << endl;
             }
 
-            if(baSize != 0){
-                huffFile.put(baToChar());
-                trash = 8 - baSize;
-                bitArray->fill(false);
-                baSize = 0;
-            }
-
-            this->header(fileName,tree);
-
-            huffFile.close();
 
         }
         else{
@@ -311,44 +318,52 @@ public:
                 uncompFile.open(destiny, std::ios::out | std::ios::binary);
             }
 
-            int x;
-            HuffNode *actualNode = root;
+            if(uncompFile.is_open()){
+                int x;
+                HuffNode *actualNode = root;
 
-            for(int i = treeSize+nameSize+3; i < size; i++){
-                myFile.seekg(i);
-                x = myFile.get();
+                for(int i = treeSize+nameSize+3; i < size; i++){
+                    myFile.seekg(i);
+                    x = myFile.get();
 
-                intToBa(x, 7, 0);
+                    intToBa(x, 7, 0);
 
-                int k;
-                if(i != size-1){
-                    k = 7;
-                }else{
-                    k = 7 - trash;
-                }
+                    int k;
+                    if(i != size-1){
+                        k = 7;
+                    }else{
+                        k = 7 - trash;
+                    }
 
-                for(int j = 0; j <= k; j++){
-                    if(!actualNode->isLeaf()){
-                        if(bitArray->at(j)){
-                            actualNode = actualNode->getRight();
-                        }else{
-                            actualNode = actualNode->getLeft();
+                    for(int j = 0; j <= k; j++){
+                        if(!actualNode->isLeaf()){
+                            if(bitArray->at(j)){
+                                actualNode = actualNode->getRight();
+                            }else{
+                                actualNode = actualNode->getLeft();
+                            }
+                        }
+                        if(actualNode->isLeaf()){
+                            uncompFile.put(actualNode->contet());
+                            actualNode = root;
                         }
                     }
-                    if(actualNode->isLeaf()){
-                        uncompFile.put(actualNode->contet());
-                        actualNode = root;
-                    }
                 }
+
+                uncompFile.close();
+                cout << "Descompactado!" << endl;
+
+
+            }else{
+                cout << "Erro ao criar arquivo!" << endl;
             }
 
-            uncompFile.close();
+            myFile.close();
 
         }else{
             cout << "Erro ao ler o arquivo!" << endl;
         }
 
-        myFile.close();
     }
 
     char* getOriginalName(){
