@@ -313,9 +313,14 @@ public:
             ofstream uncompFile;
             if(strlen(destiny) == 0){
                 uncompFile.open(originalName, std::ios::out | std::ios::binary);
+
             }else{
+                string aux;
+                aux = destiny;
+                aux += originalName;
                 strcat(destiny, originalName);
-                uncompFile.open(destiny, std::ios::out | std::ios::binary);
+                uncompFile.open(aux.c_str(), std::ios::out | std::ios::binary);
+
             }
 
             if(uncompFile.is_open()){
