@@ -111,7 +111,6 @@ int main(int argc, char *argv[])
         HuffCompac(argv[2], argv[4]);
     }
     else if(argc == 3 && strcmp(argv[1],"-c") == 0){
-        char* aux = toHuff(argv[2]);
         HuffCompac(argv[2], toHuff(argv[2]));
 
     }
