@@ -109,6 +109,7 @@ int main(int argc, char *argv[])
 
     if(argc == 5 && strcmp(argv[1],"-c") == 0 && strcmp(argv[3],"-o") == 0 && isHuff(argv[4])){
         HuffCompac(argv[2], argv[4]);
+
     }
     else if(argc == 3 && strcmp(argv[1],"-c") == 0){
         HuffCompac(argv[2], toHuff(argv[2]));
@@ -116,11 +117,13 @@ int main(int argc, char *argv[])
     }
     else if(argc == 2 && isHuff(argv[1])){
         HuffUncomp(argv[1], "");
+
     }
     else if(argc == 4 && isHuff(argv[1]) && strcmp(argv[2],"-d") == 0){
         string aux = argv[3];
         aux += "\\";
         HuffUncomp(argv[1], aux);
+
     }
     else{
         cout << endl;

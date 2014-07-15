@@ -113,6 +113,7 @@ public:
             huffFile.open(huffName, std::ios::out | std::ios::binary);
 
             if(huffFile.is_open()){
+
                 huffFile.seekp(tree.size() + strlen(fileName) + 2);
 
                 while (size > 0) {
