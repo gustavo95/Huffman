@@ -45,12 +45,12 @@ public:
             list->remove();
             root = aux1;
 
-             QBitArray ba;
-             ba.resize(1);
-             ba.setBit(0,true);
+            QBitArray ba;
+            ba.resize(1);
+            ba.setBit(0,true);
 
-             root->setBitArray(ba);
-             compDictionary->append(*root);
+            root->setBitArray(ba);
+            compDictionary->append(*root);
 
         }
         else{
@@ -129,7 +129,7 @@ public:
             tree += c;
         }
         else{
-           tree += c;
+            tree += c;
         }
     }
 
@@ -139,50 +139,50 @@ public:
 
     //reconstroi a arvore
     void rebuildTree(string treeRepr){
-       if(treeRepr.length() == 1){
-           HuffNode *aux = new HuffNode(treeRepr.at(0), 0);
-           root = aux;
-       }
-       else if(treeRepr.length() == 2 && treeRepr.at(0) == 0x40){
-           HuffNode *aux = new HuffNode(treeRepr.at(1), 0);
-           root = aux;
-       }
-       else{
-           AStack *stack = new AStack(512);
-           root = new HuffNode();
+        if(treeRepr.length() == 1){
+            HuffNode *aux = new HuffNode(treeRepr.at(0), 0);
+            root = aux;
+        }
+        else if(treeRepr.length() == 2 && treeRepr.at(0) == 0x40){
+            HuffNode *aux = new HuffNode(treeRepr.at(1), 0);
+            root = aux;
+        }
+        else{
+            AStack *stack = new AStack(512);
+            root = new HuffNode();
 
-           HuffNode *aux;
-           HuffNode *auxL = new HuffNode();
-           HuffNode *auxR = new HuffNode();
+            HuffNode *aux;
+            HuffNode *auxL = new HuffNode();
+            HuffNode *auxR = new HuffNode();
 
-           root->setLeft(auxL);
-           root->setRight(auxR);
+            root->setLeft(auxL);
+            root->setRight(auxR);
 
-           stack->push(auxR);
-           stack->push(auxL);
+            stack->push(auxR);
+            stack->push(auxL);
 
-           for(int i = 0; i < treeRepr.size(); i++){
-               if(treeRepr[i] == 0x28){
-                   aux = stack->pop();
+            for(int i = 0; i < treeRepr.size(); i++){
+                if(treeRepr[i] == 0x28){
+                    aux = stack->pop();
 
-                   auxL = new HuffNode();
-                   auxR = new HuffNode();
+                    auxL = new HuffNode();
+                    auxR = new HuffNode();
 
-                   aux->setLeft(auxL);
-                   aux->setRight(auxR);
+                    aux->setLeft(auxL);
+                    aux->setRight(auxR);
 
-                   stack->push(auxR);
-                   stack->push(auxL);
-               }
-               else{
-                   if(treeRepr[i] == 0x40){
-                       i++;
-                   }
-                   aux = stack->pop();
-                   aux->setIt(treeRepr[i]);
-               }
-           }
-       }
+                    stack->push(auxR);
+                    stack->push(auxL);
+                }
+                else{
+                    if(treeRepr[i] == 0x40){
+                        i++;
+                    }
+                    aux = stack->pop();
+                    aux->setIt(treeRepr[i]);
+                }
+            }
+        }
     }
 
 };
