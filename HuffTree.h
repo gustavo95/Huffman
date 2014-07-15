@@ -103,7 +103,7 @@ public:
         return root;
     }
 
-    //constroi a representcao da arvore
+    //constroi a representacao da arvore
     void treeRepresentation(HuffNode *node){
         if(root->isLeaf()){
             tree += 0x28; //(

@@ -49,7 +49,7 @@ public:
         return this->it;
     }
 
-    //retorna a frequencia do conteudo
+    //retorna a frequencia
     int weight(){
         return this->wgt;
     }

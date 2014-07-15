@@ -48,7 +48,7 @@ public:
 
                 HuffNode *node = new HuffNode(x, 1);
 
-                // add node na lista
+                // add node
                 if(nodeList->length() == 0){
                     nodeList->append(*node);
                 }
